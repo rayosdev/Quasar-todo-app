@@ -1,14 +1,35 @@
 <template>
-  <q-page class="flex flex-center">
-    <p>Todo Page</p>
+  <q-page class="q-pa-md">
+    <q-list 
+      separator
+      bordered
+    >
+      <task
+        v-for="(task, key) in tasks"
+        :key="key"
+        :task="task"
+        :id="key"   
+      >
+      </task>
+
+
+    </q-list>
   </q-page>
 </template>
 
-<style>
-</style>
-
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
-  name: 'PageIndex'
+  computed: {
+      ...mapGetters('tasks', ['tasks'])
+  },
+  components: {
+    'task' : require('components/Tasks/Task.vue').default
+  }
 }
 </script>
+
+<style lang="stylus" scoped>
+
+</style>

@@ -10,5 +10,9 @@ export default {
 }
 </script>
 
-<style>
+<style lang="stylus">
+
+.text-strikethrough
+  text-decoration line-through
 </style>
+
