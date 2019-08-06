@@ -4,8 +4,13 @@
         clickable
         :class="!task.compleated ? 'bg-orange-1' : 'bg-green-1'"
       >
-        <q-item-section side top>
-            <q-checkbox value="false" />
+        <q-item-section 
+            side 
+            top
+        >
+            <q-checkbox
+               :value="task.compleated"
+            />
         </q-item-section>
 
         <q-item-section>
@@ -41,6 +46,16 @@
                 </div>
             </div>
         </q-item-section>
+
+        <q-item-section side>
+            <q-btn 
+                @click.stop="propmtToDelete(id)"
+                flat 
+                round 
+                color="red" 
+                icon="delete" 
+            />
+        </q-item-section>
     </q-item>
 </template>
 
@@ -51,7 +66,18 @@
         props: ['task', 'id'],
 
         methods: {
-            ...mapActions('tasks', ['updateTask']),
+            ...mapActions('tasks', ['updateTask', 'onDeleteTask']),
+            
+            propmtToDelete(id) {
+                this.$q.dialog({
+                    title: 'Confirm',
+                    message: 'Would you like to turn on the wifi?',
+                    cancel: true,
+                    persistent: true
+                }).onOk(() => {
+                    this.onDeleteTask(id)
+                })
+            }
         },
     }
 </script>

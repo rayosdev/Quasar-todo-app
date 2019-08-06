@@ -4,16 +4,31 @@
       separator
       bordered
     >
-    <task 
-      v-for="(task, key) in tasks"
-      :key="key"
-      :task="task"
-      :id="key"  
-    >
-    </task>
-
+      <task 
+        v-for="(task, key) in tasks"
+        :key="key"
+        :task="task"
+        :id="key"  
+      >
+      </task>
 
     </q-list>
+    <div class="absolute-bottom text-center q-mb-lg">
+      <q-btn 
+        @click="showAddTask = true"
+        round
+        color="primary"
+        size="24px"
+        icon="add"
+      />
+    </div>
+
+    <q-dialog v-model="showAddTask">
+      <add-task-form></add-task-form>
+    </q-dialog>
+    
+
+
   </q-page>
 </template>
 
@@ -21,6 +36,12 @@
 import { mapGetters } from 'vuex' 
 
 export default {
+  data() {
+    return {
+      showAddTask: true
+    }
+  },
+
   computed: {
     // tasks() {
     //   return this.$store.getters['tasks/tasks']
@@ -29,7 +50,8 @@ export default {
     ...mapGetters('tasks', ['tasks'])
   },
   components: {
-    'task' : require('components/Tasks/Task.vue').default
+    'task' : require('components/Tasks/Task.vue').default,
+    'add-task-form' : require('components/Tasks/Modals/AddTask.vue').default,
   }
 }
 </script>
