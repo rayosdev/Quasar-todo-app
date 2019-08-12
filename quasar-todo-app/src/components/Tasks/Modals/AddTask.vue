@@ -7,7 +7,6 @@
                 round
                 flat
                 dens
-                size
                 v-close-popup
                 icon="close"
             />
@@ -19,13 +18,23 @@
             <q-card-section>
                 <div class="row q-mb-sm">
                     <q-input 
+                        autofocus
                         outlined 
                         v-model="taskToSubmit.name" 
                         label="Task Name"
                         ref="name"
                         class="col"
                         :rules="[ val => val && val.length > 0 || 'Please type something']"
-                    />
+                    >
+                        <template v-slot:append>
+                            <q-icon
+                                v-if="taskToSubmit.name" 
+                                name="close" 
+                                @click="taskToSubmit.name = ''" 
+                                class="cursor-pointer" 
+                            />
+                        </template>
+                    </q-input>
                 </div>
                 <div class="row q-mb-sm">
                     <q-input 
@@ -34,6 +43,12 @@
                         v-model="taskToSubmit.dueDate"
                     >
                         <template v-slot:append>
+                            <q-icon
+                                v-if="taskToSubmit.dueDate" 
+                                name="close" 
+                                @click="clearDueDate" 
+                                class="cursor-pointer" 
+                            />
                             <q-icon name="event" class="cursor-pointer">
                                 <q-popup-proxy 
                                     ref="qDateProxy" 
@@ -50,12 +65,20 @@
                     </q-input>
                 </div>
                 <div class="row q-mb-sm">
-                    <q-input 
+                    <q-input
+                        v-if="taskToSubmit.dueDate"
                         label="Due Time"
                         outlined
                         v-model="taskToSubmit.dueTime"
+                        class="col"
                     >
                         <template v-slot:append>
+                            <q-icon
+                                v-if="taskToSubmit.dueTime" 
+                                name="close" 
+                                @click="taskToSubmit.dueTime = ''" 
+                                class="cursor-pointer" 
+                            />
                             <q-icon name="access_time" class="cursor-pointer">
                                 <q-popup-proxy transition-show="scale" transition-hide="scale">
                                 <q-time v-model="taskToSubmit.dueTime" />
@@ -79,6 +102,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
     data() {
         return {
@@ -91,6 +116,7 @@ export default {
         }
     },
     methods: {
+        ...mapActions('tasks', ['addTask']),
         submitForm(){
             this.$refs.name.validate()
             if(!this.$refs.name.hasError){
@@ -98,10 +124,16 @@ export default {
             }
         },
         submitTask(){
-            console.log("make task")
+            this.addTask(this.taskToSubmit)
+            this.$emit('close')
+        },
+        clearDueDate(){
+            this.taskToSubmit.dueDate = ''
+            this.taskToSubmit.dueTime = ''
         }
     },
 }
+
 </script>
 
 <style lang="scss" scoped>

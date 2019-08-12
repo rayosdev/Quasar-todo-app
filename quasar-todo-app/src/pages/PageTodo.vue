@@ -3,6 +3,7 @@
     <q-list 
       separator
       bordered
+      v-if="Object.keys(tasks).length"
     >
       <task 
         v-for="(task, key) in tasks"
@@ -24,7 +25,9 @@
     </div>
 
     <q-dialog v-model="showAddTask">
-      <add-task-form></add-task-form>
+      <add-task-form
+        @close="showAddTask = false"
+      />
     </q-dialog>
     
 

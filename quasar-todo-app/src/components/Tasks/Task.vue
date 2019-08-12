@@ -9,6 +9,7 @@
             top
         >
             <q-checkbox
+               @input="updateTask({ id: id, update: { compleated: !task.compleated }})"
                :value="task.compleated"
             />
         </q-item-section>
@@ -21,10 +22,13 @@
             </q-item-label>
         </q-item-section>
     
-        <q-item-section side>
+        <q-item-section 
+            side
+            v-if="task.dueDate"   
+        >
             <div class="row">
                 <div class="coloumn justify-center">
-                <q-icon 
+                <q-icon
                     name="event" 
                     size="18px"
                     class="q-mr-sm"
@@ -77,7 +81,7 @@
                 }).onOk(() => {
                     this.onDeleteTask(id)
                 })
-            }
+            },
         },
     }
 </script>
