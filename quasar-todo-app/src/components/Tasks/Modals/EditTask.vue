@@ -1,7 +1,7 @@
 <template>
     <q-card>
         
-        <modal-header>Add Task</modal-header>
+        <modal-header>Edit Task</modal-header>
 
         <form
             @submit.prevent="submitForm"
@@ -26,7 +26,7 @@
                 
             </q-card-section>
             
-            <modal-buttons label="ADD"></modal-buttons>
+            <modal-buttons label="EDIT"></modal-buttons>
             
         </form>
 
@@ -38,27 +38,27 @@
 import { mapActions } from 'vuex'
 
 export default {
+    name: 'edit-task',
+    props: ['task', 'id'],
     data() {
         return {
-            taskToSubmit: {
-                name: '',
-                dueDate: '',
-                dueTime: '',
-                compleated: false
-            }
+            taskToSubmit: {}
         }
     },
     methods: {
-        ...mapActions('tasks', ['addTask']),
+        ...mapActions('tasks', ['updateTask']),
         submitForm(){
-            console.log(this.$refs)
+            // console.log(this.$refs)
             this.$refs.modalTaskName.$refs.name.validate()
             if(!this.$refs.modalTaskName.$refs.name.hasError){
                 this.submitTask()
             }
         },
         submitTask(){
-            this.addTask(this.taskToSubmit)
+            this.updateTask({
+                id: this.id,
+                update: this.taskToSubmit
+                })
             this.$emit('close')
         },
         clearDueDate(){
@@ -72,7 +72,10 @@ export default {
         'modal-due-date' : require('components/Tasks/Modals/Shared/ModalDueDate.vue').default,
         'modal-due-time' : require('components/Tasks/Modals/Shared/ModalDueTime.vue').default,
         'modal-buttons' : require('components/Tasks/Modals/Shared/ModalButtons.vue').default,
-    }
+    },
+    mounted() {
+        this.taskToSubmit = Object.assign({}, this.task)
+    },
 }
 
 </script>

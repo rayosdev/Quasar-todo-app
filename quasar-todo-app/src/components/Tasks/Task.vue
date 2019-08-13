@@ -52,14 +52,32 @@
         </q-item-section>
 
         <q-item-section side>
-            <q-btn 
-                @click.stop="propmtToDelete(id)"
-                flat 
-                round 
-                color="red" 
-                icon="delete" 
-            />
+            <div class="row">
+                <q-btn 
+                    @click.stop="propmtToDelete(id)"
+                    flat 
+                    round 
+                    color="red" 
+                    icon="delete" 
+                />
+                <q-btn 
+                    @click.stop="showEditTask = true"
+                    flat 
+                    round 
+                    color="primary" 
+                    icon="edit" 
+                />
+            </div>
         </q-item-section>
+        
+        <q-dialog v-model="showEditTask">
+            <edit-task 
+                @close="showEditTask = false" 
+                :task="task"
+                :id="id"
+            />
+        </q-dialog>
+
     </q-item>
 </template>
 
@@ -69,13 +87,19 @@
     export default {
         props: ['task', 'id'],
 
+        data() {
+            return {
+                showEditTask: false,
+            }
+        },
+
         methods: {
             ...mapActions('tasks', ['updateTask', 'onDeleteTask']),
             
             propmtToDelete(id) {
                 this.$q.dialog({
                     title: 'Confirm',
-                    message: 'Would you like to turn on the wifi?',
+                    message: 'Delate Item',
                     cancel: true,
                     persistent: true
                 }).onOk(() => {
@@ -83,6 +107,9 @@
                 })
             },
         },
+        components : {
+            'edit-task' : require('components/Tasks/Modals/EditTask.vue').default
+        }
     }
 </script>
 
